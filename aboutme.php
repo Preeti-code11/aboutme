@@ -1,8 +1,9 @@
 <?php
+$insert = false;
 //Connecting to the database
 
 $servername = "localhost";
-$username = "root";
+$username = "root"; 
 $password = "";
 $database = "dbpreeti";
 
@@ -17,7 +18,29 @@ if (!$conn){
 else{
     //echo "Connection was successful <br>";
 }
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+      $name = $_POST["name"];
+      $email = $_POST["email"];
+      $message = $_POST["msg"];
+  
+      // Sql query to be executed
+      $sql = "INSERT INTO `contactme` (`name`, `email`, `message`) VALUES ('$name', '$email', '$message')";
+      $result = mysqli_query($conn, $sql);
+  
+     
+      if($result){ 
+        $insert = true;
+      }
+      else{
+        echo "The record was not inserted successfully because of this error ---> ". mysqli_error($conn);
+      } 
+    }
+  
 ?>
+  
 
 <!doctype html>
 <html lang="en">
@@ -37,8 +60,18 @@ else{
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto placeat magni eveniet in nihil totam sint ad ducimus exercitationem deleniti? Velit maiores illo, deleniti ad adipisci consectetur ducimus repellendus voluptates animi quis! Provident aliquam quos nesciunt labore. Fugiat dolores facilis voluptatum dolorem consectetur vero suscipit, veniam commodi id exercitationem autem!</p>
     </div>
     <div class="container my-4">
+    <?php
+    if($insert){
+      echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <strong>Success!</strong> Your detail has been submitted successfully
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+        <span aria-hidden='true'>×</span>
+        </button>
+        </div>";
+    }
+    ?>
     <h2>Contact Me</h2>
-    <form action="/crud/index.php" method="POST">
+    <form action="/aboutme/aboutme.php" method="POST">
       <div class="form-group">
         <label for="name">Enter your name</label>
         <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp">
